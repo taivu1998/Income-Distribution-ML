@@ -1,6 +1,6 @@
 # Income-Distribution-ML
 
-This program implements several machine learning and deep learning algorithms for prediction income distribution in California based on satellite imagery.
+This program implements several machine learning and deep learning algorithms for prediction income distribution in California, US based on satellite imagery.
 
 ## Installation
 
