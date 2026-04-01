@@ -3,17 +3,13 @@ This program implements a machine learning program for predicting income distrib
 in California.
 '''
 
-import os, sys
+import sys
 sys.path.append('./utils')
 sys.path.append('./models')
-sys.path.append('./data')
 import argparse
 
 from utils import data_processing
 from models import cnn, lr, rf, knn, svm
-
-import warnings
-warnings.filterwarnings('ignore')
 
 
 model_options = ['cnn', 'lr', 'rf', 'knn', 'svm']
@@ -55,7 +51,7 @@ def parseArgs():
     parser.add_argument('--kernel', type = str, default = 'rbf',
                         help = 'Kernel for SVMs.', choices = kernel_options)
                         
-    args = parser.parse_known_args()[0]
+    args = parser.parse_args()
     return args
 
 
@@ -64,7 +60,11 @@ def main():
     print("Welcome to Our Machine Learning Program.")
     args = parseArgs()
     print("==> Preparing data..")
-    X_train, X_test, y_train, y_test = data_processing.prepareDataset(args.model, args.augment)
+    X_train, X_test, y_train, y_test = data_processing.prepareDataset(
+        args.model,
+        args.augment,
+        seed=args.seed,
+    )
     print("==> Training model..")
     
     if args.model == 'cnn':

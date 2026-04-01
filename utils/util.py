@@ -1,12 +1,17 @@
-import os, sys
-import math
-import io
+import os
+import sys
 import time
+
 from PIL import Image
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.init as init
 
 
-elevfile = './data/worldelev.npz'
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(ROOT_DIR, 'data')
+elevfile = os.path.join(DATA_DIR, 'worldelev.npz')
 data = np.load(elevfile, 'r')
 resolution = 120    # points per degree
 
@@ -58,16 +63,16 @@ def init_params(net):
     '''Init layer parameters.'''
     for m in net.modules():
         if isinstance(m, nn.Conv2d):
-            init.kaiming_normal(m.weight, mode='fan_out')
-            if m.bias:
-                init.constant(m.bias, 0)
+            init.kaiming_normal_(m.weight, mode='fan_out')
+            if m.bias is not None:
+                init.constant_(m.bias, 0)
         elif isinstance(m, nn.BatchNorm2d):
-            init.constant(m.weight, 1)
-            init.constant(m.bias, 0)
+            init.constant_(m.weight, 1)
+            init.constant_(m.bias, 0)
         elif isinstance(m, nn.Linear):
-            init.normal(m.weight, std=1e-3)
-            if m.bias:
-                init.constant(m.bias, 0)
+            init.normal_(m.weight, std=1e-3)
+            if m.bias is not None:
+                init.constant_(m.bias, 0)
 
 term_width = 25
 
